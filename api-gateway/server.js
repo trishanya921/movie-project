@@ -10,13 +10,13 @@ app.use(express.json());
 
 
 const SERVICES = {
-  movies:    "http://movie-service:3001",
-  users:     "http://user-service:3002",
-  recommend: "http://recommendation-service:3003",
-  reviews:   "http://review-service:3004",
-  group:     "http://group-service:3005",
-  progress:  "http://progress-service:3006",
-  rewatch:   "http://rewatch-service:3007"
+  movies:    "https://movie-service-mjnp.onrender.com",
+  users:     "https://user-service-rgfb.onrender.com",
+  recommend: "https://recommendation-service-43k2.onrender.com",
+  reviews:   "https://review-service-z2y0.onrender.com",
+  group:     "https://group-service-jrpy.onrender.com",
+  progress:  "https://progress-service-6mc3.onrender.com",
+  rewatch:   "https://rewatch-service.onrender.com"
 }
 
 // ─── USER ROUTES ─────────────────────────────────────────────
@@ -269,4 +269,8 @@ app.get("/api/movies/trailer/:id", async (req, res) => {
     res.status(502).json({ error: "Movie service unavailable" });
   }
 });
-app.listen(3000, () => console.log("API Gateway running on port 3000"));
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`API Gateway running on port ${PORT}`);
+});
