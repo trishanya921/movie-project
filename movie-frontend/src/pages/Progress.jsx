@@ -7,7 +7,8 @@ const statusColors = { watching: "#3b82f6", finished: "#22c55e", abandoned: "#ef
 const statusIcons = { watching: "▶️", finished: "✅", abandoned: "❌" };
 
 export default function Progress() {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+ const storedUser = localStorage.getItem("user");
+const user = storedUser ? JSON.parse(storedUser) : null;
   const userId = user.userId || user._id || "guest";
   const [activeTab, setActiveTab] = useState("watching");
   const [data, setData] = useState({ watching: [], finished: [], abandoned: [], total: 0 });

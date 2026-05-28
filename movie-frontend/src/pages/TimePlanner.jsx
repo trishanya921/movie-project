@@ -21,7 +21,8 @@ const GENRES = [
 ];
 
 export default function TimePlanner() {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const storedUser = localStorage.getItem("user");
+const user = storedUser ? JSON.parse(storedUser) : null;
   const [minutes, setMinutes] = useState("");
   const [buffer, setBuffer] = useState(10);
   const [selectedGenres, setSelectedGenres] = useState([]);

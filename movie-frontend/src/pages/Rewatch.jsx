@@ -5,7 +5,8 @@ import Navbar from "../components/Navbar";
 const API = "http://localhost:3000/api";
 
 export default function Rewatch() {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+ const storedUser = localStorage.getItem("user");
+const user = storedUser ? JSON.parse(storedUser) : null;
   const userId = user.userId || user._id || "guest";
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);

@@ -9,7 +9,8 @@ function Trending() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const user = JSON.parse(localStorage.getItem("user"));
+ const storedUser = localStorage.getItem("user");
+const user = storedUser ? JSON.parse(storedUser) : null;
 
   useEffect(() => {
     axios.get(`${API}/movies/trending`)

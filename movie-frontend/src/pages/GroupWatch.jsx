@@ -6,7 +6,8 @@ const API = "http://localhost:3000/api";
 const GENRES = ["Action", "Comedy", "Drama", "Horror", "Romance", "Sci-Fi", "Thriller", "Animation", "Documentary", "Fantasy"];
 
 export default function GroupWatch() {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const storedUser = localStorage.getItem("user");
+const user = storedUser ? JSON.parse(storedUser) : null;
   const [view, setView] = useState("home");
   const [joinCode, setJoinCode] = useState("");
   const [group, setGroup] = useState(null);

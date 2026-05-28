@@ -10,7 +10,8 @@ function Search() {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const storedUser = localStorage.getItem("user");
+const user = storedUser ? JSON.parse(storedUser) : null;
 
   const searchMovies = async () => {
     if (!query.trim()) return;
