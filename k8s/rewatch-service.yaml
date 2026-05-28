@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rewatch-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rewatch-service
+  template:
+    metadata:
+      labels:
+        app: rewatch-service
+    spec:
+      containers:
+      - name: rewatch-service
+        image: rewatch-service:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3007
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rewatch-service
+spec:
+  selector:
+    app: rewatch-service
+  ports:
+  - port: 3007
+    targetPort: 3007
