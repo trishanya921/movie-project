@@ -30,7 +30,8 @@ function GenrePicker() {
   const handleSave = async () => {
     if (selected.length === 0) return alert("Pick at least one genre!");
 
-    const user = JSON.parse(localStorage.getItem("user"));
+    const storedUser = localStorage.getItem("user");
+const user = storedUser ? JSON.parse(storedUser) : null;
     if (!user) return navigate("/login");
 
     try {
