@@ -70,7 +70,9 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const stored = localStorage.getItem("user");
+   // const stored = localStorage.getItem("user");
+   // SAFE
+const user = JSON.parse(localStorage.getItem("user") || "{}");
     if (!stored) return navigate("/login");
 
     const u = JSON.parse(stored);
