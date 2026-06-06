@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import MovieModal from "../components/MovieModal";
 
-const API = "http://localhost:3000/api";
+const API = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 const GENRE_EMOJIS = {
   action: "💥", comedy: "😂", drama: "🎭", horror: "👻",

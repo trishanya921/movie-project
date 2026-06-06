@@ -3,21 +3,26 @@ const axios = require("axios");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: [
+    "https://movie-frontend-81o3.onrender.com",
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
-
-
-
 const SERVICES = {
-  movies:    "https://movie-service-mjnp.onrender.com",
-  users:     "https://user-service-rgfb.onrender.com",
-  recommend: "https://recommendation-service-43k2.onrender.com",
-  reviews:   "https://review-service-z2y0.onrender.com",
-  group:     "https://group-service-jrpy.onrender.com",
-  progress:  "https://progress-service-6mc3.onrender.com",
-  rewatch:   "https://rewatch-service.onrender.com"
-}
+  movies:    process.env.MOVIE_SERVICE_URL    || "https://movie-service-mjnp.onrender.com",
+  users:     process.env.USER_SERVICE_URL     || "https://user-service-rgfb.onrender.com",
+  recommend: process.env.RECOMMEND_SERVICE_URL|| "https://recommendation-service-43k2.onrender.com",
+  reviews:   process.env.REVIEW_SERVICE_URL   || "https://review-service-z2y0.onrender.com",
+  group:     process.env.GROUP_SERVICE_URL    || "https://group-service-jrpy.onrender.com",
+  progress:  process.env.PROGRESS_SERVICE_URL || "https://progress-service-6mc3.onrender.com",
+  rewatch:   process.env.REWATCH_SERVICE_URL  || "https://rewatch-service.onrender.com",
+};
 
 // ─── USER ROUTES ─────────────────────────────────────────────
 app.post("/api/users/register", async (req, res) => {
@@ -84,6 +89,24 @@ app.get("/api/movies/genre/:genre", async (req, res) => {
   }
 });
 
+app.get("/api/movies/details/:id", async (req, res) => {
+  try {
+    const r = await axios.get(`${SERVICES.movies}/movies/details/${req.params.id}`);
+    res.json(r.data);
+  } catch (err) {
+    res.status(502).json({ error: "Movie service unavailable" });
+  }
+});
+
+app.get("/api/movies/trailer/:id", async (req, res) => {
+  try {
+    const r = await axios.get(`${SERVICES.movies}/movies/trailer/${req.params.id}`);
+    res.json(r.data);
+  } catch (err) {
+    res.status(502).json({ error: "Movie service unavailable" });
+  }
+});
+
 // ─── RECOMMENDATION ROUTES ────────────────────────────────────
 app.post("/api/recommend", async (req, res) => {
   try {
@@ -112,12 +135,6 @@ app.post("/api/reviews", async (req, res) => {
     res.status(502).json({ error: "Review service unavailable" });
   }
 });
-// ─── ADD THESE TO YOUR EXISTING gateway/server.js ───────────────
-
-// Add these 3 lines to your SERVICES object:
-// group:    "http://group-service:3005",
-// progress: "http://progress-service:3006",
-// rewatch:  "http://rewatch-service:3007",
 
 // ─── GROUP ROUTES ─────────────────────────────────────────────
 app.post("/api/groups/create", async (req, res) => {
@@ -138,18 +155,18 @@ app.post("/api/groups/join", async (req, res) => {
   }
 });
 
-app.get("/api/groups/:code", async (req, res) => {
+app.get("/api/groups/:code/recommend", async (req, res) => {
   try {
-    const r = await axios.get(`${SERVICES.group}/groups/${req.params.code}`);
+    const r = await axios.get(`${SERVICES.group}/groups/${req.params.code}/recommend`);
     res.json(r.data);
   } catch (err) {
     res.status(502).json({ error: "Group service unavailable" });
   }
 });
 
-app.get("/api/groups/:code/recommend", async (req, res) => {
+app.get("/api/groups/:code", async (req, res) => {
   try {
-    const r = await axios.get(`${SERVICES.group}/groups/${req.params.code}/recommend`);
+    const r = await axios.get(`${SERVICES.group}/groups/${req.params.code}`);
     res.json(r.data);
   } catch (err) {
     res.status(502).json({ error: "Group service unavailable" });
@@ -175,9 +192,9 @@ app.post("/api/progress", async (req, res) => {
   }
 });
 
-app.get("/api/progress/:userId", async (req, res) => {
+app.get("/api/progress/:userId/stats/summary", async (req, res) => {
   try {
-    const r = await axios.get(`${SERVICES.progress}/progress/${req.params.userId}`);
+    const r = await axios.get(`${SERVICES.progress}/progress/${req.params.userId}/stats/summary`);
     res.json(r.data);
   } catch (err) {
     res.status(502).json({ error: "Progress service unavailable" });
@@ -193,9 +210,9 @@ app.get("/api/progress/:userId/:movieId", async (req, res) => {
   }
 });
 
-app.get("/api/progress/:userId/stats/summary", async (req, res) => {
+app.get("/api/progress/:userId", async (req, res) => {
   try {
-    const r = await axios.get(`${SERVICES.progress}/progress/${req.params.userId}/stats/summary`);
+    const r = await axios.get(`${SERVICES.progress}/progress/${req.params.userId}`);
     res.json(r.data);
   } catch (err) {
     res.status(502).json({ error: "Progress service unavailable" });
@@ -230,15 +247,6 @@ app.get("/api/rewatch/top/all", async (req, res) => {
   }
 });
 
-app.get("/api/rewatch/:movieId", async (req, res) => {
-  try {
-    const r = await axios.get(`${SERVICES.rewatch}/rewatch/${req.params.movieId}`);
-    res.json(r.data);
-  } catch (err) {
-    res.status(502).json({ error: "Rewatch service unavailable" });
-  }
-});
-
 app.get("/api/rewatch/:movieId/user/:userId", async (req, res) => {
   try {
     const r = await axios.get(`${SERVICES.rewatch}/rewatch/${req.params.movieId}/user/${req.params.userId}`);
@@ -248,29 +256,18 @@ app.get("/api/rewatch/:movieId/user/:userId", async (req, res) => {
   }
 });
 
+app.get("/api/rewatch/:movieId", async (req, res) => {
+  try {
+    const r = await axios.get(`${SERVICES.rewatch}/rewatch/${req.params.movieId}`);
+    res.json(r.data);
+  } catch (err) {
+    res.status(502).json({ error: "Rewatch service unavailable" });
+  }
+});
+
 // ─── HEALTH ───────────────────────────────────────────────────
 app.get("/health", (req, res) => res.json({ status: "ok" }));
-// Movie details
-app.get("/api/movies/details/:id", async (req, res) => {
-  try {
-    const r = await axios.get(`${SERVICES.movies}/movies/details/${req.params.id}`);
-    res.json(r.data);
-  } catch (err) {
-    res.status(502).json({ error: "Movie service unavailable" });
-  }
-});
+app.get("/", (req, res) => res.send("API Gateway Running 🚀"));
 
-// Movie trailer
-app.get("/api/movies/trailer/:id", async (req, res) => {
-  try {
-    const r = await axios.get(`${SERVICES.movies}/movies/trailer/${req.params.id}`);
-    res.json(r.data);
-  } catch (err) {
-    res.status(502).json({ error: "Movie service unavailable" });
-  }
-});
 const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`API Gateway running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`API Gateway running on port ${PORT}`));

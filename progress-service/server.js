@@ -2,7 +2,15 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://movie-frontend-81o3.onrender.com",
+    "https://api-gateway-bv7f.onrender.com",
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 // In-memory storage
@@ -83,4 +91,6 @@ app.get("/progress/:userId/stats/summary", (req, res) => {
 });
 
 app.get("/", (req, res) => res.send("Progress Service Running 🚀"));
-app.listen(3006, () => console.log("Progress service running on port 3006"));
+//app.listen(3006, () => console.log("Progress service running on port 3006"));
+const PORT = process.env.PORT || 3001; // use your service's port as fallback
+app.listen(PORT, () => console.log(`Service running on port ${PORT}`));

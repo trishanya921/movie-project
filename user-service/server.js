@@ -4,7 +4,15 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://movie-frontend-81o3.onrender.com",
+    "https://api-gateway-bv7f.onrender.com",
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 const JWT_SECRET = process.env.JWT_SECRET || "movieflix_secret_key";
@@ -105,4 +113,6 @@ app.get("/users/:id", (req, res) => {
 
 app.get("/", (req, res) => res.send("User Service Running 🚀"));
 
-app.listen(3002, () => console.log("User service running on port 3002"));
+//app.listen(3002, () => console.log("User service running on port 3002"));
+const PORT = process.env.PORT || 3001; // use your service's port as fallback
+app.listen(PORT, () => console.log(`Service running on port ${PORT}`));

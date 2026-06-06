@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API = "https://movie-frontend-81o3.onrender.com/api";;
+const API = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 function Login() {
   const [tab, setTab] = useState("login"); // "login" | "register"

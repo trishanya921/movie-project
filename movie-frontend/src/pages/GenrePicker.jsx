@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API = "http://localhost:3000/api";
+const API = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 const GENRES = [
   { id: "action", label: "Action", emoji: "💥" },
@@ -30,8 +30,7 @@ function GenrePicker() {
   const handleSave = async () => {
     if (selected.length === 0) return alert("Pick at least one genre!");
 
-    const storedUser = localStorage.getItem("user");
-const user = storedUser ? JSON.parse(storedUser) : null;
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
     if (!user) return navigate("/login");
 
     try {

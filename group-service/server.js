@@ -3,7 +3,30 @@ const cors = require("cors");
 const crypto = require("crypto");
 
 const app = express();
-app.use(cors());
+// ============================================================
+// Add this CORS config to ALL these services:
+// user-service, movie-service, recommendation-service,
+// review-service, group-service, progress-service, rewatch-service
+// ============================================================
+
+// REPLACE:
+//   app.use(cors());
+// WITH:
+app.use(cors({
+  origin: [
+    "https://movie-frontend-81o3.onrender.com",
+    "https://api-gateway-bv7f.onrender.com",
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ],
+  credentials: true
+}));
+
+// Also change app.listen to use PORT env variable:
+// REPLACE:
+//   app.listen(3001, ...) or app.listen(3002, ...) etc
+// WITH:
+
 app.use(express.json());
 
 // In-memory storage
@@ -92,4 +115,6 @@ app.post("/groups/:code/leave", (req, res) => {
 });
 
 app.get("/", (req, res) => res.send("Group Service Running 🚀"));
-app.listen(3005, () => console.log("Group service running on port 3005"));
+//app.listen(3005, () => console.log("Group service running on port 3005"));
+const PORT = process.env.PORT || 3001; // use your service's port as fallback
+app.listen(PORT, () => console.log(`Service running on port ${PORT}`));

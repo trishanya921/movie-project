@@ -3,7 +3,7 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 import MovieModal from "../components/MovieModal";
 
-const API = "http://localhost:3000/api";
+const API = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 const QUICK_TIMES = [
   { label: "30 min", value: 30, emoji: "⚡" },
@@ -21,8 +21,7 @@ const GENRES = [
 ];
 
 export default function TimePlanner() {
-  const storedUser = localStorage.getItem("user");
-const user = storedUser ? JSON.parse(storedUser) : null;
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const [minutes, setMinutes] = useState("");
   const [buffer, setBuffer] = useState(10);
   const [selectedGenres, setSelectedGenres] = useState([]);

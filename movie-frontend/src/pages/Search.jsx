@@ -3,15 +3,14 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 import MovieModal from "../components/MovieModal";
 
-const API = "http://localhost:3000/api";
+const API = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 function Search() {
   const [movies, setMovies] = useState([]);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const storedUser = localStorage.getItem("user");
-const user = storedUser ? JSON.parse(storedUser) : null;
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const searchMovies = async () => {
     if (!query.trim()) return;

@@ -2,7 +2,15 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://movie-frontend-81o3.onrender.com",
+    "https://api-gateway-bv7f.onrender.com",
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 let reviews = [];
@@ -37,4 +45,6 @@ app.get("/reviews/:movieId", (req, res) => {
 
 app.get("/", (req, res) => res.send("Review Service Running 🚀"));
 
-app.listen(3004, () => console.log("Review service running on port 3004"));
+//app.listen(3004, () => console.log("Review service running on port 3004"));
+const PORT = process.env.PORT || 3001; // use your service's port as fallback
+app.listen(PORT, () => console.log(`Service running on port ${PORT}`));

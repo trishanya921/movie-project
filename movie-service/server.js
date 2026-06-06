@@ -3,7 +3,15 @@ const axios = require("axios");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://movie-frontend-81o3.onrender.com",
+    "https://api-gateway-bv7f.onrender.com",
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 const API_KEY = process.env.TMDB_API_KEY || "bcb9cc07b15b432a1bdbcc8c04553be6";
@@ -139,4 +147,6 @@ app.get("/movies/trailer/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch trailer" });
   }
 });
-app.listen(3001, () => console.log("Movie service running on port 3001"));
+//app.listen(3001, () => console.log("Movie service running on port 3001"));
+const PORT = process.env.PORT || 3001; // use your service's port as fallback
+app.listen(PORT, () => console.log(`Service running on port ${PORT}`));

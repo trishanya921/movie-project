@@ -3,7 +3,15 @@ const axios = require("axios");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://movie-frontend-81o3.onrender.com",
+    "https://api-gateway-bv7f.onrender.com",
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 const MOVIE_SERVICE = "http://movie-service:3001";
@@ -60,6 +68,8 @@ app.post("/recommend", async (req, res) => {
 
 app.get("/", (req, res) => res.send("Recommendation Service Running 🚀"));
 
-app.listen(3003, () =>
-  console.log("Recommendation service running on port 3003")
-);
+//app.listen(3003, () =>
+  //console.log("Recommendation service running on port 3003")
+//);
+const PORT = process.env.PORT || 3001; // use your service's port as fallback
+app.listen(PORT, () => console.log(`Service running on port ${PORT}`));

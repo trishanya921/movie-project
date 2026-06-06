@@ -2,13 +2,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 
-const API = "http://localhost:3000/api";
+const API = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 const statusColors = { watching: "#3b82f6", finished: "#22c55e", abandoned: "#ef4444" };
 const statusIcons = { watching: "▶️", finished: "✅", abandoned: "❌" };
 
 export default function Progress() {
- const storedUser = localStorage.getItem("user");
-const user = storedUser ? JSON.parse(storedUser) : null;
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userId = user.userId || user._id || "guest";
   const [activeTab, setActiveTab] = useState("watching");
   const [data, setData] = useState({ watching: [], finished: [], abandoned: [], total: 0 });
